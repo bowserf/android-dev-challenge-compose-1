@@ -17,4 +17,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <color name="internal_design_system_text_main">#21173B</color>
+    <color name="internal_design_system_text_secondary">#8284A0</color>
+
+    <color name="home_kitten_card_text_male">#327CE9</color>
+    <color name="home_kitten_card_text_bg_male">#D5E1F7</color>
+    <color name="home_kitten_card_text_female">#FF48A6</color>
+    <color name="home_kitten_card_text_bg_female">#FFCDE8</color>
 </resources>

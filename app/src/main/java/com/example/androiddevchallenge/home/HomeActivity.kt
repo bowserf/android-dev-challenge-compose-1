@@ -19,13 +19,38 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.androiddevchallenge.catalog.Kitten
+import com.example.androiddevchallenge.catalog.KittenAge
+import com.example.androiddevchallenge.catalog.KittenGender
+import com.example.androiddevchallenge.catalog.KittenSize
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import androidx.compose.ui.res.painterResource
+import com.example.androiddevchallenge.R
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,4 +89,117 @@ fun DarkPreview() {
     MyTheme(darkTheme = true) {
         MyApp()
     }
+}
+
+@Composable
+fun KittenCard(
+    kitten: Kitten
+) {
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        elevation = 8.dp,
+    ) {
+        Column(
+            modifier = Modifier
+                .background(color = Color.White)
+                .padding(8.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.lili),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(100.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = kitten.name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(
+                    text = "Breed:",
+                    color = Color.LightGray
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = kitten.race
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                when (kitten.gender) {
+                    KittenGender.FEMALE -> {
+                        KittenDescriptionCell(
+                            "Female",
+                            colorResource(id = R.color.home_kitten_card_text_female),
+                            colorResource(id = R.color.home_kitten_card_text_bg_female)
+                        )
+                    }
+                    KittenGender.MALE -> {
+                        KittenDescriptionCell(
+                            "Male",
+                            colorResource(id = R.color.home_kitten_card_text_male),
+                            colorResource(id = R.color.home_kitten_card_text_bg_male)
+                        )
+                    }
+                }
+                val kittenAge = when (kitten.age.years) {
+                    0 -> LocalContext.current.resources.getQuantityString(
+                        R.plurals.home_screen_kitten_card_age_months,
+                        kitten.age.months,
+                        kitten.age.months
+                    )
+                    else -> LocalContext.current.resources.getQuantityString(
+                        R.plurals.home_screen_kitten_card_age_years,
+                        kitten.age.years,
+                        kitten.age.years
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                KittenDescriptionCell(
+                    kittenAge,
+                    colorResource(id = R.color.internal_design_system_text_main),
+                    Color.LightGray
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun KittenDescriptionCell(
+    text: String,
+    textColor: Color,
+    backgroundColor: Color
+) {
+    Text(
+        text = text,
+        color = textColor,
+        modifier = Modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+    )
+}
+
+@Preview
+@Composable
+fun KittenCardPreview() {
+    val kitten = Kitten(
+        "kitten_id_1",
+        "Lili",
+        "Adorable big cat who will follow you everywhere you go until she has enough cuddle... but her limit is infinite!",
+        KittenGender.FEMALE,
+        KittenAge(5, 6),
+        KittenSize.BIG,
+        listOf("Brown", "White", "Black"),
+        "european",
+        "22 cité des cèdres, Quiberon, France"
+    )
+    KittenCard(kitten)
 }

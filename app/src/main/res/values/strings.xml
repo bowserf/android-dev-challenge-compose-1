@@ -10,4 +10,14 @@
       the License.
       -->
     <string name="app_name">AndroidDevChallenge</string>
+
+    <string name="home_screen_kitten_card_breed">Breed:</string>
+    <plurals name="home_screen_kitten_card_age_years">
+        <item quantity="one">%d Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
+    <plurals name="home_screen_kitten_card_age_months">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
 </resources>
