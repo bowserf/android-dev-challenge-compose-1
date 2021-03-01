@@ -3,6 +3,7 @@ package com.example.androiddevchallenge.catalog
 data class Kitten(
     val id: String,
     val name: String,
+    val imageName: String,
     val description: String,
     val gender: KittenGender,
     val age: KittenAge,

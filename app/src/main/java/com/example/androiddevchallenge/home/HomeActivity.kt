@@ -22,11 +22,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -34,9 +38,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +55,8 @@ import com.example.androiddevchallenge.catalog.KittenGender
 import com.example.androiddevchallenge.catalog.KittenSize
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import com.example.androiddevchallenge.R
 
 
@@ -61,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val kittens = viewModel.getKittens().observeAsState(listOf())
             MyTheme {
-                MyApp()
+                MyApp(kittens.value)
             }
         }
     }
@@ -69,56 +77,83 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(kittens: List<Kitten>) {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Column {
+            Text(
+                text = stringResource(id = R.string.home_screen_title),
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.internal_design_system_text_main),
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+            KittenList(kittens)
+        }
     }
 }
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+private fun KittenList(kittens: List<Kitten>) {
+    val kittenPairs = createKittenPairsList(kittens)
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(items = kittenPairs) { kittenPair ->
+            Row {
+                KittenCard(
+                    kitten = kittenPair.first,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                if (kittenPair.second != null) {
+                    KittenCard(
+                        kitten = kittenPair.second!!,
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun KittenCard(
-    kitten: Kitten
+    kitten: Kitten,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = 8.dp,
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
                 .background(color = Color.White)
-                .padding(8.dp)
         ) {
+            val image = getDrawableRes(kitten.imageName)
             Image(
-                painter = painterResource(R.drawable.lili),
+                painter = painterResource(image),
+                contentScale = ContentScale.Crop,
                 contentDescription = null,
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(120.dp)
                     .clip(RoundedCornerShape(16.dp))
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = kitten.name,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Row {
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
                 Text(
                     text = "Breed:",
                     color = Color.LightGray
@@ -129,7 +164,9 @@ fun KittenCard(
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Row {
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
                 when (kitten.gender) {
                     KittenGender.FEMALE -> {
                         KittenDescriptionCell(
@@ -164,7 +201,9 @@ fun KittenCard(
                     colorResource(id = R.color.internal_design_system_text_main),
                     Color.LightGray
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -193,6 +232,7 @@ fun KittenCardPreview() {
     val kitten = Kitten(
         "kitten_id_1",
         "Lili",
+        "lili",
         "Adorable big cat who will follow you everywhere you go until she has enough cuddle... but her limit is infinite!",
         KittenGender.FEMALE,
         KittenAge(5, 6),
@@ -202,4 +242,23 @@ fun KittenCardPreview() {
         "22 cité des cèdres, Quiberon, France"
     )
     KittenCard(kitten)
+}
+
+@Composable
+private fun getDrawableRes(drawableName: String) =
+    LocalContext.current.resources.getIdentifier(
+        drawableName,
+        "drawable",
+        LocalContext.current.packageName
+    )
+
+private fun createKittenPairsList(kittens: List<Kitten>): MutableList<Pair<Kitten, Kitten?>> {
+    val kittenPairs = mutableListOf<Pair<Kitten, Kitten?>>()
+    for (i in 0 until kittens.size / 2) {
+        kittenPairs.add(Pair(kittens[i * 2], kittens[i * 2 + 1]))
+    }
+    if (kittens.size % 2 != 0) {
+        kittenPairs.add(Pair(kittens.last(), null))
+    }
+    return kittenPairs
 }

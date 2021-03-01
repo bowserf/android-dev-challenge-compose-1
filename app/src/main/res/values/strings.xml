@@ -11,6 +11,8 @@
       -->
     <string name="app_name">AndroidDevChallenge</string>
 
+    <string name="home_screen_title">Find your next best friend</string>
+
     <string name="home_screen_kitten_card_breed">Breed:</string>
     <plurals name="home_screen_kitten_card_age_years">
         <item quantity="one">%d Year</item>
