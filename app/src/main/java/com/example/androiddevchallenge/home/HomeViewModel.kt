@@ -12,6 +12,10 @@ class HomeViewModel(
 
     private val kittens = MutableLiveData<List<Kitten>>()
 
+    init {
+        kittens.value = kittenCatalog.getKittens()
+    }
+
     fun getKittens(): LiveData<List<Kitten>> {
         return kittens
     }
