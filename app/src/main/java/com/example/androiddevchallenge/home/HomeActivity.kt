@@ -97,7 +97,6 @@ class HomeActivity : AppCompatActivity() {
         }
 }
 
-// Start building your app here!
 @Composable
 fun MyApp(
     kittens: List<Kitten>,
