@@ -13,6 +13,8 @@ This challenge brings back the motivation to look at this new big thing in the A
 
 Moreover, I enjoyed the subject because I could use pictures of my own kittens and the ones of my friends! Every one participated in this project!
 
+Here is [the designed](https://dribbble.com/shots/14973110/attachments/6692558?mode=media) I tried to recreate. Thanks to Royal Parvej for this really nice UI!
+
 ## :camera_flash: Screenshots
 <img src="/results/screenshot_1.png" width="260">&emsp;<img src="/results/screenshot_2.png" width="260">
 
