@@ -91,10 +91,10 @@ class KittenCatalogRAM : KittenCatalog {
             ),
             Kitten(
                 "kitten_id_6",
-                "Moustache",
-                "chat_lea",
+                "Sparadrap",
+                "sparadrap",
                 "A small version of cat with a giant heart, who will give you all the love she has to you!",
-                KittenGender.FEMALE,
+                KittenGender.MALE,
                 KittenAge(10, 0),
                 KittenSize.NORMAL,
                 listOf("Black", "White"),
