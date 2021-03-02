@@ -10,7 +10,7 @@ data class Kitten(
     val size: KittenSize,
     val color: List<String>,
     val race: String,
-    val localisation: String,
+    val location: String,
 )
 
 enum class KittenGender {
