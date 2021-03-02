@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -46,24 +45,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.catalog.Kitten
 import com.example.androiddevchallenge.catalog.KittenAge
 import com.example.androiddevchallenge.catalog.KittenGender
 import com.example.androiddevchallenge.catalog.KittenSize
-import com.example.androiddevchallenge.ui.theme.MyTheme
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.event.Event
 import com.example.androiddevchallenge.kitten_details.KittenDetailsActivity
+import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.utils.getDrawableRes
 import java.util.Observer
-
 
 class MainActivity : AppCompatActivity() {
 
