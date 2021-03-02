@@ -116,6 +116,7 @@ private fun KittenList(kittens: List<Kitten>) {
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -217,6 +218,7 @@ fun KittenDescriptionCell(
     Text(
         text = text,
         color = textColor,
+        fontSize = 12.sp,
         modifier = Modifier
             .background(
                 color = backgroundColor,
