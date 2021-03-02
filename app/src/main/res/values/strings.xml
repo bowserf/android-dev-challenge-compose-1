@@ -16,6 +16,8 @@
     <string name="kitten_screen_details_information_sex">Sex</string>
     <string name="kitten_screen_details_information_age">Age</string>
     <string name="kitten_screen_details_information_breed">Breed</string>
+    <string name="kitten_screen_details_information_colors">Colors</string>
+    <string name="kitten_screen_details_information_size">Size</string>
     <string name="kitten_screen_details_details">Details</string>
     <string name="kitten_screen_details_adopt_me">Adopt me</string>
 

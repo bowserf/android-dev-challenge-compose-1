@@ -27,6 +27,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -36,6 +37,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -43,7 +46,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +68,6 @@ import com.example.androiddevchallenge.catalog.KittenAge
 import com.example.androiddevchallenge.catalog.KittenGender
 import com.example.androiddevchallenge.catalog.KittenSize
 import com.example.androiddevchallenge.utils.getDrawableRes
-import java.lang.IllegalStateException
 
 class KittenDetailsActivity : AppCompatActivity() {
 
@@ -120,69 +121,57 @@ class KittenDetailsActivity : AppCompatActivity() {
                                 )
                             )
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
                     ) {
                         Text(
                             text = kitten.name,
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.kitten_details_screen_location),
                                 contentDescription = null
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = kitten.location)
+                            Text(
+                                text = kitten.location,
+                                color = colorResource(id = R.color.internal_design_system_text_secondary)
+                            )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
+
+                        val kittenInformation = generateKittenInformation(kitten)
+                        LazyRow(
+                            contentPadding = PaddingValues(16.dp)
                         ) {
-                            KittenInformationCard(
-                                stringResource(id = R.string.kitten_screen_details_information_sex),
-                                kitten.gender.toString()
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            val kittenAge = when (kitten.age.years) {
-                                0 -> LocalContext.current.resources.getQuantityString(
-                                    R.plurals.home_screen_kitten_card_age_months,
-                                    kitten.age.months,
-                                    kitten.age.months
+                            items(items = kittenInformation) { information ->
+                                KittenInformationCard(
+                                    information.first,
+                                    information.second
                                 )
-                                else -> LocalContext.current.resources.getQuantityString(
-                                    R.plurals.home_screen_kitten_card_age_years,
-                                    kitten.age.years,
-                                    kitten.age.years
-                                )
+                                Spacer(modifier = Modifier.width(8.dp))
                             }
-                            KittenInformationCard(
-                                stringResource(id = R.string.kitten_screen_details_information_age),
-                                kittenAge
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            KittenInformationCard(
-                                stringResource(id = R.string.kitten_screen_details_information_breed),
-                                kitten.race
-                            )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+
                         Text(
                             text = stringResource(id = R.string.kitten_screen_details_details),
                             color = colorResource(id = R.color.internal_design_system_text_main),
-                            fontSize = 18.sp
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
                         Text(
                             text = kitten.description,
-                            color = colorResource(id = R.color.internal_design_system_text_secondary)
+                            color = colorResource(id = R.color.internal_design_system_text_secondary),
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
                 }
@@ -225,6 +214,44 @@ class KittenDetailsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun generateKittenInformation(kitten: Kitten): List<Pair<String, String>> {
+        val kittenAge = when (kitten.age.years) {
+            0 -> LocalContext.current.resources.getQuantityString(
+                R.plurals.home_screen_kitten_card_age_months,
+                kitten.age.months,
+                kitten.age.months
+            )
+            else -> LocalContext.current.resources.getQuantityString(
+                R.plurals.home_screen_kitten_card_age_years,
+                kitten.age.years,
+                kitten.age.years
+            )
+        }
+        return listOf(
+            Pair(
+                stringResource(id = R.string.kitten_screen_details_information_sex),
+                kitten.gender.toString()
+            ),
+            Pair(
+                stringResource(id = R.string.kitten_screen_details_information_age),
+                kittenAge
+            ),
+            Pair(
+                stringResource(id = R.string.kitten_screen_details_information_breed),
+                kitten.race
+            ),
+            Pair(
+                stringResource(id = R.string.kitten_screen_details_information_size),
+                kitten.size.toString()
+            ),
+            Pair(
+                stringResource(id = R.string.kitten_screen_details_information_colors),
+                kitten.color.joinToString()
+            )
+        )
     }
 
     @Composable
