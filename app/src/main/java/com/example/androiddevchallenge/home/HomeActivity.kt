@@ -21,6 +21,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -58,26 +59,53 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import com.example.androiddevchallenge.R
+import com.example.androiddevchallenge.event.Event
+import com.example.androiddevchallenge.kitten_details.KittenDetailsActivity
+import com.example.androiddevchallenge.utils.getDrawableRes
+import java.util.Observer
 
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels { HomeViewModelFactory() }
 
+    private val navigateToKittenDetailsObserver by lazy { createNavigateToKittenDetailsObserver() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val kittens = viewModel.getKittens().observeAsState(listOf())
             MyTheme {
-                MyApp(kittens.value)
+                MyApp(
+                    kittens.value,
+                    onClickItem = { kittenId ->
+                        viewModel.onClickKitten(kittenId)
+                    }
+                )
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.getNavigateToKittenDetails().observe(this, navigateToKittenDetailsObserver)
+    }
+
+    private fun createNavigateToKittenDetailsObserver() =
+        androidx.lifecycle.Observer<Event<String>> { event ->
+            KittenDetailsActivity.startActivity(
+                this@MainActivity,
+                event.getContentIfNotHandled()!!
+            )
+        }
 }
 
 // Start building your app here!
 @Composable
-fun MyApp(kittens: List<Kitten>) {
+fun MyApp(
+    kittens: List<Kitten>,
+    onClickItem: (String) -> Unit
+) {
     Surface(color = MaterialTheme.colors.background) {
         Column {
             Text(
@@ -88,13 +116,19 @@ fun MyApp(kittens: List<Kitten>) {
                 modifier = Modifier
                     .padding(16.dp)
             )
-            KittenList(kittens)
+            KittenList(
+                kittens,
+                onClickItem = onClickItem
+            )
         }
     }
 }
 
 @Composable
-private fun KittenList(kittens: List<Kitten>) {
+private fun KittenList(
+    kittens: List<Kitten>,
+    onClickItem: (String) -> Unit
+) {
     val kittenPairs = createKittenPairsList(kittens)
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -104,12 +138,15 @@ private fun KittenList(kittens: List<Kitten>) {
             Row {
                 KittenCard(
                     kitten = kittenPair.first,
+                    onClick = { onClickItem(kittenPair.first.id) },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 if (kittenPair.second != null) {
+                    val kitten = kittenPair.second!!
                     KittenCard(
-                        kitten = kittenPair.second!!,
+                        kitten = kitten,
+                        onClick = { onClickItem(kitten.id) },
                         modifier = Modifier.weight(1f)
                     )
                 } else {
@@ -124,12 +161,14 @@ private fun KittenList(kittens: List<Kitten>) {
 @Composable
 fun KittenCard(
     kitten: Kitten,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp,
         modifier = modifier
+            .clickable { onClick() }
     ) {
         Column(
             modifier = Modifier
@@ -243,16 +282,8 @@ fun KittenCardPreview() {
         "european",
         "22 cité des cèdres, Quiberon, France"
     )
-    KittenCard(kitten)
+    KittenCard(kitten, {})
 }
-
-@Composable
-private fun getDrawableRes(drawableName: String) =
-    LocalContext.current.resources.getIdentifier(
-        drawableName,
-        "drawable",
-        LocalContext.current.packageName
-    )
 
 private fun createKittenPairsList(kittens: List<Kitten>): MutableList<Pair<Kitten, Kitten?>> {
     val kittenPairs = mutableListOf<Pair<Kitten, Kitten?>>()

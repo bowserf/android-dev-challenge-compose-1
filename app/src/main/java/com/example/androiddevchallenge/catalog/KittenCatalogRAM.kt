@@ -8,6 +8,10 @@ class KittenCatalogRAM : KittenCatalog {
         return kittens
     }
 
+    override fun getKitten(id: String): Kitten {
+        return kittens.first { it.id == id }
+    }
+
     private fun createKittenList(): List<Kitten> {
         return mutableListOf(
             Kitten(

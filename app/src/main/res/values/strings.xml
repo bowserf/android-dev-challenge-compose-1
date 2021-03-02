@@ -13,6 +13,12 @@
 
     <string name="home_screen_title">Find your next best friend</string>
 
+    <string name="kitten_screen_details_information_sex">Sex</string>
+    <string name="kitten_screen_details_information_age">Age</string>
+    <string name="kitten_screen_details_information_breed">Breed</string>
+    <string name="kitten_screen_details_details">Details</string>
+    <string name="kitten_screen_details_adopt_me">Adopt me</string>
+
     <string name="home_screen_kitten_card_breed">Breed:</string>
     <plurals name="home_screen_kitten_card_age_years">
         <item quantity="one">%d Year</item>
