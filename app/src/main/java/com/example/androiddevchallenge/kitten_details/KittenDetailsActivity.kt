@@ -233,7 +233,7 @@ class KittenDetailsActivity : AppCompatActivity() {
         return listOf(
             Pair(
                 stringResource(id = R.string.kitten_screen_details_information_sex),
-                kitten.gender.toString()
+                kitten.gender.toString().toLowerCase().capitalize()
             ),
             Pair(
                 stringResource(id = R.string.kitten_screen_details_information_age),
@@ -241,11 +241,11 @@ class KittenDetailsActivity : AppCompatActivity() {
             ),
             Pair(
                 stringResource(id = R.string.kitten_screen_details_information_breed),
-                kitten.race
+                kitten.race.capitalize()
             ),
             Pair(
                 stringResource(id = R.string.kitten_screen_details_information_size),
-                kitten.size.toString()
+                kitten.size.toString().toLowerCase().capitalize()
             ),
             Pair(
                 stringResource(id = R.string.kitten_screen_details_information_colors),
