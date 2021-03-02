@@ -60,9 +60,8 @@ import com.example.androiddevchallenge.event.Event
 import com.example.androiddevchallenge.kitten_details.KittenDetailsActivity
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.utils.getDrawableRes
-import java.util.Observer
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels { HomeViewModelFactory() }
 
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     private fun createNavigateToKittenDetailsObserver() =
         androidx.lifecycle.Observer<Event<String>> { event ->
             KittenDetailsActivity.startActivity(
-                this@MainActivity,
+                this@HomeActivity,
                 event.getContentIfNotHandled()!!
             )
         }
